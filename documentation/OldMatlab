@@ -1,0 +1,186 @@
+function[LTcurve] = sarc_sim(angle,angle_changing,animate,moviename)
+% assign filament dimensions in microns
+A = 1.6; % length of the thick filament
+I = 2.05; % length of two thin fiaments and a z-line or body
+BZ = 0.20; % length of the bare-zone
+mh_spacing = 0.02; % spacing between myosin
+heads n = 30; % number of thin filaments
+h_initial = 6; % initial height of the sarcomere
+area = A*h_initial; % area is the initial length of the sarcomere (A)
+times the intial height of the sarcomere (h)
+p = h_initial/sin(angle/180*pi); % other side of the parallelogram
+% create figure for the
+animation if animate
+fig = figure;
+hold on
+h1 = []; % dummy handle for some figure graphic
+end
+% create movie container if called
+for if exist('moviename','var')
+mov = VideoWriter([moviename,'.avi']);
+open(mov);
+end
+% find the force at each sarcomere length
+LF = zeros(round(2*I/mh_spacing)+1,2); % create an array in which to store
+Length and
+Tension l = 1;
+for L = A:mh_spacing:A+4*I
+h = area/L; % calculate the height of the sarcomere
+d = h/n; % calculate the distance between the filaments based on area
+and length.
+% if the angle is changing, calculate the angle of
+striation if angle_changing
+theta = asin(h/p);
+else
+theta = angle/180*pi;
+end
+x = d/tan(theta); % calculate the lateral distance between the start
+of thin filaments
+% create arrays to hold the locations of the filaments
+TFL = zeros(n-1,round((A-BZ)/2/mh_spacing)+1,2); % create an array to
+hold the locations of the left myosin heads
+% fill in array for myosin
+heads for i = 1:n-1
+k = 1;
+for j = (L-A)/2 + x*i:mh_spacing:(L-BZ)/2 + x*i
+TFL(i,k,1) = j; 
+TFL(i,k,2) = (i1)*d; k = k+1;
+en
+d
+end
+TFR = zeros(n-1,round((A-BZ)/2/mh_spacing)+1,2); % create an array
+to hold the locations of the right myosin heads
+% fill in array for myosin
+heads for i = 1:n-1
+k = 1;
+for j = (L+BZ)/2 + x*i:mh_spacing:(L+A)/2 + x*i
+TFR(i,k,1) = j; 
+TFR(i,k,2) = (i1)*d; k = k+1;
+en
+d
+end
+tfl = zeros(3,n); % create an array to hold the locations of the
+left thin filaments
+% fill in array for the thin
+filaments for i = 1:n
+tfl(1,i) = (i-1)*x; 
+tfl(2,i) = I/2 + (i1)*x; tfl(3,i) = (i1)*d;
+end
+tfr = zeros(3,n); % create an array to hold the locations of the
+right thin filaments
+% fill in array for the thin
+filaments for i = 1:n
+tfr(1,i) = LI/2+i*x; tfr(2,i) =
+L+i*x; tfr(3,i) =
+(i-1)*d;
+end
+% compare the arrays to calculate the force
+Fsumn = zeros(1,n); % create an empty array to count the force
+produced by each filament set
+for i = 1:n-1 % for each filament
+for k = 1:round((A-BZ)/2/mh_spacing)+1 % along all possible
+positions if (tfl(1,i) <= TFL(i,k,1)) && (TFL(i,k,1) <= tfl(2,i))
+% if
+the
+left myosin head overlaps with the left thin filament
+if (tfr(1,i) <= TFL(i,k,1)) && (TFL(i,k,1) <= tfr(2,i)) %
+if they left myosin head overlaps with the right thin filament
+Fsumn(i) = Fsumn(i); % keep the force the same
+because the thin filaments are interfering with each other
+else
+Fsumn(i) = Fsumn(i) + 1; % if the thin filaments do
+not overlap and there is a left myosin head, add one to the force.
+end
+end
+if (tfl(1,i+1) <= TFL(i,k,1)) && (TFL(i,k,1) <= tfl(2,i+1)) %
+check the thin filament on the other side of the left myosin head
+if (tfr(1,i+1) <= TFL(i,k,1)) && (TFL(i,k,1) <= tfr(2,i+1)) 
+Fsumn(i) = Fsumn(i);
+else
+Fsumn(i) = Fsumn(i) + 1;
+end
+end
+if (tfr(1,i) <= TFR(i,k,1)) && (TFR(i,k,1) <= tfr(2,i)) %do the 
+same for the right myosin heads
+if (tfl(1,i) <= TFR(i,k,1)) && (TFR(i,k,1) <= tfl(2,i)) 
+Fsumn(i) = Fsumn(i);
+else
+Fsumn(i) = Fsumn(i) + 1;
+end
+end
+if (tfr(1,i+1) <= TFR(i,k,1)) && (TFR(i,k,1) <= tfr(2,i+1))
+if (tfl(1,i+1) <= TFR(i,k,1)) && (TFR(i,k,1) <= tfl(2,i+1)) 
+Fsumn(i) = Fsumn(i);
+else
+Fsumn(i) = Fsumn(i) + 1;
+end
+end
+end
+end
+% store the length and total force in the LF array
+LF(l,1) = L;
+LF(l,2) = sum(Fsumn);
+% create/update the animation if called for 
+if animate
+if isempty(h1) == false % delete graphics from the previous 
+delete(h1);
+delete(h2); 
+delete(h3); 
+delete(h4); 
+delete(h5);
+end
+% plot new components in the bottom panel 
+subplot(2,1,1);
+hold on
+h1 = plot(TFL(1:n-1,1:round((A-BZ)/2/mh_spacing)+1,1),TFL(1:n1,1:round((A-BZ)/2/mh_spacing)+1,2),'g*');
+h2 = plot(TFR(1:n-1,1:round((A-BZ)/2/mh_spacing)+1,1),TFR(1:n1,1:round((A-BZ)/2/mh_spacing)+1,2),'g*');
+q = tfl(1:2,1:n); w =
+tfl(3,1:n); w(2,:) =
+tfl(3,1:n); h3 =
+plot(q,w);
+r = tfr(1:2,1:n); s =
+tfr(3,1:n); s(2,:) =
+tfr(3,1:n); h4 =
+plot(r,s);
+axis([0 A+2*I 0 h_initial]);
+% Adjust the length tension curve for P0 and L0 
+[m,q] = size(LF);
+maxForce = max(LF(1:m,2));
+LTcurve(1:m,2) = LF(1:m,2)/maxForce;
+[r,c] = find(LTcurve == 1); 
+[x,y] = size(r);
+L0 = sum(r(1:x))/x;
+LTcurve(1:m,1) = LF(1:m,1)/LF(round(L0),1);
+% plot new components in bottom panel 
+subplot(2,1,2);
+hold on
+h5 = plot(LTcurve(1:m,1),LTcurve(1:m,2),'g*');
+axis([0 4 0 1])
+% add frame to the movie if we're creating one 
+if exist('moviename','var')
+% Write each frame to the file 
+currFrame = getframe(gcf); 
+writeVideo(mov,currFrame);
+end 
+else
+% Adjust the length tension curve for P0 and L0 
+[m,q] = size(LF);
+maxForce = max(LF(1:m,2)); 
+LTcurve(1:m,2) = LF(1:m,2)/maxForce;
+[r,c] = find(LTcurve == 1); 
+[x,y] = size(r);
+L0 = sum(r(1:x))/x;
+en
+d
+LTcurve(1:m,1) = LF(1:m,1)/LF(round(L0),1);
+pause(.01) % slight pause so the figure animation gets displayed
+if LF(l,2) == 0 % if the force is 0, stop the program 
+break
+end
+l = l+1;
+end
+% close the movie if we created one 
+if exist('moviename','var')
+close(mov);
+end
+end

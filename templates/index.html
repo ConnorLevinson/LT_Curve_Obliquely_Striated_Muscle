@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/LTCurve.css">
+    <script src="/static/js/LTCurve.js"></script>
+    <title>Obliquely Striated Muscle</title>
+</head>
+<body>
+    <div class="container">
+        <div id="loading" style="display: none; text-align: center;">
+            <img src="/static/images/loadMount.gif" alt="Loading..." />
+        </div>
+        <div class="sidebar">
+            <h1>Obliquely Striated Muscle Length-Tension Prediction</h1>
+            <form method="post">
+                <label for="angle">Angle (degrees):</label>
+                <input type="number" id="angle" name="angle" required min="1" max="90" 
+                step="0.1" title="Enter an angle between 0 and 180 degrees.">
+
+                <label for="A">Thick Filament Length (A, in micrometers):</label>
+                <input type="number" id="A" name="A" required min="0.1" max="20" 
+                step="0.01" title="Enter a length between 0.1 and 10 microns.">
+
+                <label for="I">Length of Two Thin Filaments and Z-line (I, in micrometers):</label>
+                <input type="number" id="I" name="I" required min="0.1" max="20" 
+                step="0.01" title="Enter a length between 0.1 and 10 microns.">
+
+                <label for="BZ">Bare-Zone Length (BZ, in micrometers):</label>
+                <input type="number" id="BZ" name="BZ" required min="0.01" max="10" 
+                step="0.01" title="Enter a length between 0 and 5 microns.">
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div class="main" id="main">
+            {% if result %}
+                <h2>Results</h2>
+                <img src="{{ result }}" alt="Result plot">
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
