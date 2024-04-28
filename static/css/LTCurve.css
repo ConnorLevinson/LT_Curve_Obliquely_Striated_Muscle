@@ -6,7 +6,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    flex-direction: column;
     background-color: #f4f4f9;
 }
 
@@ -51,7 +51,7 @@ body {
 input[type="number"], input[type="submit"] {
     width: 100%;
     padding: 8px;
-    margin-top: 5px;
+    margin-top: 2px;
     box-sizing: border-box; /* Includes padding and border in the element's width/height */
 }
 
@@ -83,3 +83,47 @@ h1 {
     text-align: center;
 }
 
+@media print {
+    header, footer, nav, .no-print {
+        display: none;
+    }
+}
+
+button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 8px;
+    margin-top: 2px;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+.background-info{
+    display: flex;
+    width: 90%;
+    max-width: 1200px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.background-info p {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    flex: 1;
+    padding: 20px;
+    border-right: 2px solid #eee;
+    width:90%;
+    color: #333;
+    display: flex;
+    align-items: center;
+    background-color: #f4f4f4;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}

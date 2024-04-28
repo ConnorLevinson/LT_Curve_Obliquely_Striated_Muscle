@@ -6,6 +6,18 @@
     <title>Obliquely Striated Muscle</title>
 </head>
 <body>
+    <div class="background-info">
+        <p>
+            This website offers a way to explore the length-tension relationships found in obliquely striated muscles.
+            These muscles differ from muscles we're familiar with because they have a distinct protein structure that influences how they produce tension.
+            The application allows for users to choose values for the filament lengths, bare-zone lengths, and angle of striation.
+            This was built using the research of Dr. Taylor-Burt and colleagues for educational and reasearch purposes.
+        </p>
+        <p>
+            For more information:&nbsp;<a href="../static/Taylor-Burt et al., 2018.pdf">Research</a>&nbsp;and&nbsp;
+            <a href="../static/Taylor-Burt et al. Supplementary Information File.pdf">Previous MATLAB version </a>
+        </p>
+    </div>
     <div class="container">
         <div id="loading" style="display: none; text-align: center;">
             <img src="/static/images/loadMount.gif" alt="Loading..." />
@@ -31,6 +43,8 @@
 
                 <input type="submit" value="Submit">
             </form>
+            <button onclick="printDocument()">Print Document</button>
+            <button onclick="shareLink()">Share this page</button>
         </div>
         <div class="main" id="main">
             {% if result %}
